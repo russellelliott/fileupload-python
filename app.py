@@ -25,12 +25,12 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#Uploading files
+#Render page for uploading files
 @app.route('/')
 def upload_form():
     return render_template('upload.html')
 
-
+#Uploading files
 @app.route('/', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
@@ -49,10 +49,17 @@ def upload_file():
         flash('File(s) successfully uploaded')
         return redirect('/')
 
-#Searching files for specific keywords
+#Render search page
 @app.route('/search')
 def searchpage():
     return render_template('search.html')
+
+#Searching files for specific keywords
+@app.route('/search', methods=['POST'])
+def my_form_post():
+    text = request.form['text']
+    processed_text = text.lower()
+    return processed_text
 
 
 if __name__ == "__main__":

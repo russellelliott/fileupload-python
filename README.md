@@ -31,6 +31,7 @@ To search for keywords, go to http://127.0.0.1:5000/search and type keywords (se
 - Link to download file
 - Date file was modified
 - File size
+If the user enters no keywords, then all the resumes will be displayed.
 
 ### File Display and Download via AutoIndex Source Code
 https://github.com/russellelliott/AutoIndex-File-Display-and-Download

@@ -89,9 +89,11 @@ except:
 #Check the file to see if it contains all the keywords specified
 def filter(file, words):
     f = open(file, "r") #read the file
+    if words == []:
+        return True #if wordlist is empty, return True; this will display all the resumes, as the user isn't using keywords, implying they want to see all the resumes.
     string = f.read().lower() #read file, convert to lowercase
     res = [ele for ele in words if(ele in string)] #test if all elements in the words list are in the string
-    return res
+    return res #returns true if all keywords are in resume, false otherwise
 
 def get_files(target, words):
     for file in os.listdir(target):

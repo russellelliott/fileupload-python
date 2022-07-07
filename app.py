@@ -97,7 +97,7 @@ def get_files(target):
 
 #Viewing the files in the directory
 @app.route('/files')
-def index():
+def files():
     files = get_files(app.config['UPLOAD_FOLDER'])
     return render_template('files.html', **locals(), variable = UPLOAD_FOLDER)
 

@@ -1,5 +1,5 @@
 # Python Resume Parser
-Headstarter Summer Fellowship Week 1 Sample Project
+Headstarter Summer Fellowship Week 1 Project
 
 ## Functionality
 This program performs 3 main tasks

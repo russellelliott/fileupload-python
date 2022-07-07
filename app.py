@@ -54,13 +54,60 @@ def upload_file():
 def searchpage():
     return render_template('search.html')
 
+from flask_autoindex import AutoIndex
+from flask import send_from_directory
+
 #Searching files for specific keywords
 @app.route('/search', methods=['POST'])
 def my_form_post():
     text = request.form['text']
-    processed_text = text.lower()
+    processed_text = text.lower() #text from the input converted to lowercase
     return processed_text
 
+from flask_moment import Moment
+from datetime import datetime
+import os
+
+def byte_units(value, units=-1):
+    UNITS=('Bytes', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB')
+    i=1
+    value /= 1000.0
+    while value > 1000 and (units == -1 or i < units) and i+1 < len(UNITS):
+        value /= 1000.0
+        i += 1
+    return f'{round(value,3):.3f} {UNITS[i]}'
+
+app.jinja_env.filters.update(byte_units = byte_units)
+moment = Moment(app)
+
+try:
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+except:
+    pass
+
+def get_files(target):
+    for file in os.listdir(target):
+        path = os.path.join(target, file)
+        if os.path.isfile(path):
+            yield (
+                file,
+                datetime.utcfromtimestamp(os.path.getmtime(path)),
+                os.path.getsize(path)
+            )
+
+#Viewing the files in the directory
+@app.route('/files')
+def index():
+    files = get_files(app.config['UPLOAD_FOLDER'])
+    return render_template('files.html', **locals(), variable = UPLOAD_FOLDER)
+
+@app.route('/download/<path:filename>')
+def download(filename):
+    return send_from_directory(
+        app.config['UPLOAD_FOLDER'],
+        filename,
+        as_attachment=True
+    )
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1',port=5000,debug=False,threaded=True)
